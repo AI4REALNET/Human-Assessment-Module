@@ -1,93 +1,98 @@
-# D2.2 Human Assessment Module v0.5
+# Datasets Structure
+These datasets were created from data gathered following a specific protocol described in [Rodrigues et al., 2018](https://www.mdpi.com/1660-4601/15/6/1080).
 
+In this study were performed the following tests:
+- `Baseline`: sit comfortably for 10 min.
 
+- `2-Choice Reaction Time Task (CRTT)`: selective-attention task, whereas participants identified either the large, global letter or the small, local letters of a hierarchically organized visual object. Their response time and correct/incorrect/missed answers were recorded.
 
-## Getting started
+- `Trier Social Stress Test (TSST)`: acute psychosocial stress paradigm.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The order of the tasks was the following: 
+`Baseline -> CRTT1 -> TSST -> CRTT2`
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Along the protocol, various phsycological scales assessments were performed and their results are saved in the created dataset.
 
-## Add your files
+A dataset was created per each Air Trafic Controlers (ATC).
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Each dataset is stored in a structured format. Below is an example of the file format:
 
+- **File Type**: `.json`
+- **Columns**:
+
+| Column Name             | Description |
+|-------------------------|-------------|
+| **Test_phase**          | The phase of the experiment (e.g., baseline, CRTT1, TSST, CRTT2). |
+| **ECG**                 | Raw ECG signal, 1 lead & Fs = 500 HZ. |
+| **VAS**                 | Visual Analogue Scale rating. |
+| **STAI_6items**         | State-Trait Anxiety Inventory (6-item version) score. |
+| **Accuracy**            | Percentage of correct responses in a cognitive task. |
+| **Reaction_time**       | Response time in seconds. |
+| **RT_std**              | Standard deviation of reaction times. |
+| **Cognitive_performance** | Composite score of cognitive task performance. |
+
+### ECG Waveform Features
+| Column Name             | Description |
+|-------------------------|-------------|
+| **p_wave_duration**     | Duration of the P wave (ms). |
+| **pr_interval**         | Time from the start of the P wave to the start of the QRS complex (ms). |
+| **pr_segment**          | Time between the end of the P wave and the start of the QRS complex (ms). |
+| **qrs_duration**        | Duration of the QRS complex (ms). |
+| **qt_interval**         | Time between the start of the Q wave and the end of the T wave (ms). |
+| **st_segment**          | Segment between the QRS complex and the T wave (ms). |
+| **st_interval**         | Time between the J point and the end of the T wave (ms). |
+| **t_wave_duration**     | Duration of the T wave (ms). |
+| **tp_segment**          | Time from the end of the T wave to the start of the next P wave (ms). |
+| **rr_interval**         | Time between two consecutive R-peaks (ms). |
+
+### Heart Rate Variability (HRV) Metrics
+| Column Name             | Description |
+|-------------------------|-------------|
+| **mean_nni**           | Mean of normal-to-normal (NN) intervals (ms). |
+| **sdnn**               | Standard deviation of NN intervals (ms). |
+| **sdsd**               | Standard deviation of successive differences between NN intervals (ms). |
+| **nni_50**             | Number of pairs of successive NN intervals differing by more than 50 ms. |
+| **pnni_50**            | Percentage of NN50 count divided by the total number of NN intervals. |
+| **nni_20**             | Number of pairs of successive NN intervals differing by more than 20 ms. |
+| **pnni_20**            | Percentage of NN20 count divided by the total number of NN intervals. |
+| **rmssd**              | Root mean square of successive differences (ms). |
+| **median_nni**         | Median of NN intervals (ms). |
+| **range_nni**          | Range of NN intervals (max-min) (ms). |
+| **cvsd**               | Coefficient of variation of successive differences. |
+| **cvnni**              | Coefficient of variation of NN intervals. |
+
+### Heart Rate Metrics
+| Column Name             | Description |
+|-------------------------|-------------|
+| **mean_hr**            | Mean heart rate (beats per minute). |
+| **max_hr**             | Maximum heart rate recorded. |
+| **min_hr**             | Minimum heart rate recorded. |
+| **std_hr**             | Standard deviation of heart rate. |
+
+### Frequency-Domain HRV Metrics
+| Column Name             | Description |
+|-------------------------|-------------|
+| **lf**                 | Low-frequency power (ms²). |
+| **hf**                 | High-frequency power (ms²). |
+| **lf_hf_ratio**        | Ratio of LF to HF power. |
+| **lfnu**               | Low-frequency power in normalized units. |
+| **hfnu**               | High-frequency power in normalized units. |
+| **total_power**        | Total spectral power of HRV (ms²). |
+| **vlf**                | Very low-frequency power (ms²). |
+  
+# Running the Code
+To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
+
+```bash
+python -m code.algorithms.cognition.model_personalization
 ```
-cd existing_repo
-git remote add origin https://gitlab.inesctec.pt/cpes/european-projects/ai4realnet/inesc-tec/human-assessment-module/d2.2-human-assessment-module-v0.5.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+Upon execution, you will be prompted to select a file containing the dataset. 
 
-- [ ] [Set up project integrations](https://gitlab.inesctec.pt/cpes/european-projects/ai4realnet/inesc-tec/human-assessment-module/d2.2-human-assessment-module-v0.5/-/settings/integrations)
+⚠ Attention: The input dataset must follow the required structure, though no example is currently provided, as the data used for testing is private.
 
-## Collaborate with your team
+### Output Details:
+- Running the command will generate a model based on the provided dataset.
+- Users must enter a unique code to the model when prompted.
+- The model will be saved as a `.pkl`file in the `personalised_models` folder within the working directory.  - The - The file will follow this naming convention: `personalised_models/model_<user_code>.pkl`
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
