@@ -31,7 +31,7 @@ The experimental framework collects the following data per participant:
 - **Answer_timing:** Timestamps indicating when each visual stimulus was presented (used to align with physiological signals).
 
 ### Dependencies
-*[Psychtoolbox](http://psychtoolbox.org/) must be installed and tested before running the visual tasks.*
+*[Psychtoolbox](http://psychtoolbox.org/) must be installed and tested before running the visual tasks. Please check Psychtoolbox dependencies at the end*
 
 ## 🧠 Personalised Quantification of Cognitive Performance
 
@@ -177,6 +177,50 @@ python -m code.main
 - MATLAB R2018a or later
 - Psychtoolbox-3
 - Signal Processing Toolbox
+
+#### How-to instal os several MATLAB-specific dependencies to run the experimental protocol properly
+1. Install Required Libraries (Windows)
+Before launching any MATLAB experiments, you must install the following dependencies:
+
+GStreamer (for video/audio handling in Psychtoolbox) - Install both of these:
+- gstreamer-1.0-msvc-x86_64-1.26.4
+- gstreamer-1.0-devel-msvc-x86_64-1.26.4
+
+After installing, restart your computer or manually add the GStreamer bin/ directory to your Windows system PATH.
+
+Visual C++ Runtimes - Install:
+
+- Visual-C-Runtimes-All-in-One (July 2025)  (or latest version from trusted GitHub source)
+    
+2. Install Psychtoolbox in MATLAB
+
+After installing the system dependencies, follow these steps inside MATLAB:
+
+```bash
+cd('C:\')  % Or your preferred installation folder 
+!git clone https://github.com/Psychtoolbox-3/Psychtoolbox-3.git Psychtoolbox 
+cd('C:\Psychtoolbox') 
+SetupPsychtoolbox 
+restoredefaultpath 
+addpath(genpath('C:\Psychtoolbox')) 
+savepath 
+rehash toolboxcache 
+clear Screen
+```
+
+During SetupPsychtoolbox, accept all prompts to clean the path and finalize setup.
+
+3. Test Psychtoolbox Installation
+Run the following in MATLAB to check:
+
+```bash
+Screen('Preference', 'SkipSyncTests', 1); 
+AssertOpenGL 
+w = Screen('OpenWindow', 0, 0);  % A black window should appear 
+sca   % Closes the window`
+```
+
+If the window opens successfully, your installation is complete.
 
 ### Python Dependencies (for model training and real-time inference):
 - Python 3.x
