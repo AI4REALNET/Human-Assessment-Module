@@ -1,0 +1,8 @@
+Model,Weight
+logistic_regression,0.14
+KNN,0.14
+SVM,0.14
+decision_tree,0.14
+gradient_boosting,0.14
+naive_bayes,0.16
+LDA,0.14

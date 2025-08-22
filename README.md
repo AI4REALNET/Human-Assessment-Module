@@ -1,9 +1,10 @@
 # Human Assessment Module
-This repository provides the code to support the creation of personalised machine learning models to quantify the cognitive performance and using psycophysiological data. It is organised into four main components:
+This repository provides the code to support the creation of personalised machine learning models to quantify the cognitive performance and identify stress states, using physiological data. It is organised into four main components:
 
 - **Framework for Experimental Protocol and Data Collection**
 - **Personalised Quantification of Cognitive Performance**
-
+- **Personalised Classification of Stress**
+- **Real-time Implementation**
 
 ## 🧪 Framework for Experimental Protocol and Data Collection
 The folder `reaction_time_protocol` contains the MATLAB experimental framework used to gather physiological and behavioral data, following the experimental design described in [Rodrigues et al., 2018](https://www.mdpi.com/1660-4601/15/6/1080).
@@ -57,7 +58,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 
 
 ### ECG Waveform Features
-| Column Name             | Description |
+| Key Name             | Description |
 |-------------------------|-------------|
 | **p_wave_duration**     | Duration of the P wave (ms). |
 | **pr_interval**         | Time from the start of the P wave to the start of the QRS complex (ms). |
@@ -71,7 +72,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 | **rr_interval**         | Time between two consecutive R-peaks (ms). |
 
 ### Heart Rate Variability (HRV) Metrics
-| Column Name             | Description |
+| Key Name             | Description |
 |-------------------------|-------------|
 | **mean_nni**           | Mean of normal-to-normal (NN) intervals (ms). |
 | **sdnn**               | Standard deviation of NN intervals (ms). |
@@ -87,7 +88,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 | **cvnni**              | Coefficient of variation of NN intervals. |
 
 ### Heart Rate Metrics
-| Column Name             | Description |
+| Key Name             | Description |
 |-------------------------|-------------|
 | **mean_hr**            | Mean heart rate (beats per minute). |
 | **max_hr**             | Maximum heart rate recorded. |
@@ -95,7 +96,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 | **std_hr**             | Standard deviation of heart rate. |
 
 ### Frequency-Domain HRV Metrics
-| Column Name             | Description |
+| Key Name             | Description |
 |-------------------------|-------------|
 | **lf**                 | Low-frequency power (ms²). |
 | **hf**                 | High-frequency power (ms²). |
@@ -105,19 +106,87 @@ Each personalised model expects a JSON file as input containing rows of extracte
 | **total_power**        | Total spectral power of HRV (ms²). |
 | **vlf**                | Very low-frequency power (ms²). |
   
-# Running the Code
+###  Output Details
+- Running the command will generate a model based on the provided dataset.
+- Users must enter a unique code to the model when prompted.
+- The model will be saved as a `.pkl` file in the `cognition_personalised_models` folder within the working directory. The file will follow this naming convention: `cognition_personalised_models/model_<user_code>.pkl`
+
+### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
-
 ```bash
-python -m code.algorithms.cognition.model_personalization
+python -m code.personalisation_algorithms.cognition_model_personalisation
 ```
-
 Upon execution, you will be prompted to select a file containing the dataset. 
 
 ⚠ Attention: The input dataset must follow the required structure, though no example is currently provided, as the data used for testing is private.
 
-### Output Details:
-- Running the command will generate a model based on the provided dataset.
-- Users must enter a unique code to the model when prompted.
-- The model will be saved as a `.pkl`file in the `personalised_models` folder within the working directory.  - The - The file will follow this naming convention: `personalised_models/model_<user_code>.pkl`
+## ⚡Personalised Classification of Stress
+### Input
+Each personalised model expects a JSON file as input containing rows of extracted physiological features. The expected structure is the same presented for the cognition performance algorithm. See the "Personalised Quantification of Cognitive Performance" input description for detailed field structure.
 
+###  Output Details
+- Running the command will generate a set of models from the provided dataset and a CSV with the performance weights.
+- Users must enter a unique code to the model when prompted.
+- The outputs will be saved in the `stress_personalised_models/Controller_<user_code>` folder within the working directory. The model files will follow this naming convention: `stress_<model_name>_C<user_code>.pkl`, while the CSV follows:`model_weights_C<user_code>.csv` 
+
+### Running the Code
+To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
+```bash
+python -m code.personalisation_algorithms.stress_model_personalisation
+```
+Upon execution, you will be prompted to select a file containing the dataset. 
+
+⚠ Attention: The input dataset must follow the required structure, though no example is currently provided, as the data used for testing is private.
+
+## ⚙️ Real-time Implementation
+
+The real-time implementation loads personalised cognition and stress models based on a controller_id and applies them to updated physiological feature data, which is read every 60 seconds in a continuous loop.
+
+### Input
+On the current code version, an example CSV file: `example_ecg_features.csv` with physiological features is uploaded. The input must include all the ECG features used for "Personalised Quantification of Cognitive Performance":  
+- ECG Waveform Features
+- Heart Rate Variability (HRV) Metrics
+- Heart Rate Metrics
+- Frequency-Domain HRV Metrics
+
+But **should exclude** the `Protocol Variables`, which are only available during training.
+
+⚠️ This should be replaced with a real-time data stream , using the same feature structure as the example CSV.
+
+The appropriate models are automatically selected based on the input controller_id.
+
+### Output details
+The script prints:
+
+- Cognition model prediction and explainability results
+
+- Stress model prediction and explainability results
+
+Results are printed to the console in each 60-second cycle.
+
+In the future, the output can be extended to automatically send results to an API endpoint, store them in a database, or feed a real-time dashboard interface.
+
+### Running the Code
+To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
+```bash
+python -m code.main
+```
+
+## Dependencies
+### MATLAB Dependencies (for `reaction_time_protocol`)
+- MATLAB R2018a or later
+- Psychtoolbox-3
+- Signal Processing Toolbox
+
+### Python Dependencies (for model training and real-time inference):
+- Python 3.x
+- Required Python libraries listed in `requirements.txt`
+
+Install required Python libraries using:
+
+```bash
+pip install -r requirements.txt
+```
+
+## License
+This project is licensed under the MIT License.
