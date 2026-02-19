@@ -39,7 +39,7 @@ def linear_regression(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.D
     grid_search = GridSearchCV(
         lin_reg,
         param_grid=param_grid,
-        scoring='r2',
+        scoring='neg_root_mean_squared_error',
         cv=2,
         n_jobs=-1,
         verbose=1

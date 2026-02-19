@@ -22,7 +22,7 @@ def mutual_info_features_selection(X: pd.DataFrame, Y: pd.DataFrame) -> dict[str
     return mutual_info_scores.to_dict()
 
 
-def select_n_features(test: str, dictionary: dict[str, float], n_features_to_select: int) -> list:
+def select_n_features(test: str, dictionary: dict[str, float], n_features_to_select: int) -> list[tuple[str, float]]:
     """
     Selects the top n_features_to_select features based on the specified statistical test.
     
@@ -30,7 +30,7 @@ def select_n_features(test: str, dictionary: dict[str, float], n_features_to_sel
     :param dict dictionary[str, float]: Dictionary mapping feature names to importance scores.
     :param int n_features_to_select: Number of top features to select.
     
-    :return list top_n_features: List of top N selected features
+    :return list top_n_features: List of top N selected features with weights.
     """
     if test == 'correlation' or test == 'spearman' or 'anova_kurkis':
          # Sort the dictionary by values in ascending order
@@ -40,17 +40,15 @@ def select_n_features(test: str, dictionary: dict[str, float], n_features_to_sel
         top_n_features = list(sorted_dict.keys())[:n_features_to_select]
 
         return top_n_features
-    elif 'mutual_info': # mutual info case
+    elif test == 'mutual_info': # mutual info case
         # Sort the dictionary by values in descending order
-        sorted_dict = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
+        sorted_dict = list(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
 
-        # Select the top n_features keys
-        top_n_features = list(sorted_dict.keys())[:n_features_to_select]
-        return top_n_features
+        return sorted_dict[:n_features_to_select]
     else: 
         raise ValueError("Test type must be 'correlation', 'mutual_info', 'anova_kuskis' or 'spearman'.")
 
-def log_reg_features_selection(X: pd.DataFrame, Y: pd.DataFrame, n_features_to_select: int) -> list[str]:
+def log_reg_features_selection(X: pd.DataFrame, Y: pd.DataFrame, n_features_to_select: int) -> list[tuple[str, float]]:
     """
     Select top features using Recursive Feature Elimination (RFE) with logistic regression.
 
@@ -60,7 +58,7 @@ def log_reg_features_selection(X: pd.DataFrame, Y: pd.DataFrame, n_features_to_s
     :param Y: Target variable (must be categorical or binary).
     :param n_features_to_select: Number of features to select.
     
-    :return list selected_features: List of selected feature names.
+    :return list selected_features: List of selected feature names and regression coefficient as weights.
     """
     # Define logistic regression model
     log_reg = LogisticRegression(solver='liblinear')
@@ -69,7 +67,9 @@ def log_reg_features_selection(X: pd.DataFrame, Y: pd.DataFrame, n_features_to_s
     rfe = RFE(log_reg, n_features_to_select=n_features_to_select)
     rfe.fit(X, Y)
 
-    # Extract selected feature names
+    # Extract selected feature names and weights
     selected_features = X.columns[rfe.support_].tolist()
+    weights = abs(rfe.estimator_.coef_[0])
+    features_and_weights = list(zip(selected_features, weights))
 
-    return selected_features
+    return features_and_weights

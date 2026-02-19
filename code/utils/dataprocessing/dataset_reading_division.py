@@ -34,13 +34,14 @@ def cognition_dataset_reading_division() -> tuple[pd.DataFrame, pd.DataFrame, pd
     # Drop all other columns not used for modeling
     X = dataset.drop(columns=['Test_phase', 'STAI_6items', 'ECG', 'VAS', 'Accuracy', 'Reaction_time', 'RT_std', 'Cognitive_performance'])
 
-    # Select top 5 features using mutual information criterion
-    features = select_n_features('mutual_info', mutual_info_features_selection(X, y), 5)
+    # Select top 5 features (with weights) using mutual information criterion
+    features_and_weights = select_n_features('mutual_info', mutual_info_features_selection(X, y), 5)
+    features = [f for f, _ in features_and_weights]
 
     # Split the dataset into train (80%) and test (20%)
     X_train, X_test, y_train, y_test = train_test_split(X[features], y, test_size=0.2, random_state=42)
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, features_and_weights
 
 def stress_dataset_reading_division() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """ 
@@ -78,10 +79,11 @@ def stress_dataset_reading_division() -> tuple[pd.DataFrame, pd.DataFrame, pd.Da
     # Drop all other columns not used for modeling
     X = df.drop(columns=['Test_phase', 'STAI_6items', 'ECG', 'VAS', 'Accuracy', 'Reaction_time', 'RT_std', 'Cognitive_performance'])
 
-    # Select top 5 features using logistic regression-based selection
-    features = log_reg_features_selection(X, y_encoded, 5)
+    # Select top 5 features (with weights) using logistic regression-based selection
+    features_and_weights = log_reg_features_selection(X, y_encoded, 5)
+    features = [f for f, _ in features_and_weights]
 
     # Split the dataset into train (80%) and test (20%)
     X_train, X_test, y_train, y_test = train_test_split(X[features], y_encoded, test_size=0.2, random_state=42, stratify=y_encoded)
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, features_and_weights

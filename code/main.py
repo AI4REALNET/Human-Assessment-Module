@@ -5,10 +5,11 @@ from code.utils.ml.modelloading.cognition_model_loader import load_cognition_mod
 
 controller_id = input("Inser the numerical code of the controller to fetch their personalised model:\n")
 
-while True:
+while True: #Update each 30s
     start_time = time.time() # Start clock for each loop 
 
-    # TODO: Replace with automated new features loading every 1min
+    # Substitute here with the streaming ECG features of your own preference
+    # In this case, the code simulates that each row of the .csv file is the result of an external extraction pipeline
     df_features = pd.read_csv("example_ecg_features.csv")
 
     # Run cognition and stress models prediction
@@ -17,6 +18,7 @@ while True:
 
     # Print Cognition Output
     print(cog_explainability)
+    print("\n")
     # Print Stress Output
     print(stress_explainability)
     

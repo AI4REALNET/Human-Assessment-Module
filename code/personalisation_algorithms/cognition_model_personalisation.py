@@ -1,5 +1,7 @@
 import os
 import joblib
+import pandas as pd
+import openpyxl
 from code.utils.ml.quantification.bayesian_regression import bayesian_regression
 from code.utils.ml.quantification.linear_regression import linear_regression
 from code.utils.ml.quantification.polynomial_regression import polynomial_regression
@@ -20,7 +22,7 @@ Steps:
 4. Save the best model as a .pkl file with user-defined identifier.
 """
 # Step 1: Load dataset and split
-X_train, X_test, y_train, y_test = cognition_dataset_reading_division()
+X_train, X_test, y_train, y_test, features_and_weights = cognition_dataset_reading_division()
 
 # List of regression functions
 functions = [
@@ -46,6 +48,7 @@ for func in functions:
     eval_results.append({
         'Model': func.__name__, 
         'RMSE': eval_result.get('RMSE'), 
+        'R2': eval_result.get('R2'),
         'model_obj': best_model
         })
 
@@ -59,19 +62,20 @@ eval_results_sorted = sorted(eval_results, key=lambda x: x['RMSE'])
 print("-------------------")
 print("-------------------")
 print('Best Model')
-print(f"Model: {eval_results_sorted[0].get("Model")}")
-print(f"RMSE: {eval_results_sorted[0].get("RMSE")}")
+print(f"Model: {eval_results_sorted[0].get('Model')}")
+print(f"RMSE: {eval_results_sorted[0].get('RMSE')}")
 
 # Get best model and features
 best_model_obj = eval_results_sorted[0].get("model_obj")
 best_model_features = eval_results_sorted[0].get("Features")
 
-# Step 4: Save model locally with unique controller ID
+# Step 4: Save model and its properties locally with unique controller ID
 save_path = "cognition_personalised_models/"
 while True:
     # Ask user for a unique controller code
     input_controller_code = input("Insert a numeric code to identify the controller:\n")
     pkl_file_name = os.path.join(save_path, f'model_C{input_controller_code}.pkl')
+    modelinfo_file_name = os.path.join(save_path, 'modelinfo_C' + str(input_controller_code) + '.xlsx')
 
     if not os.path.exists(pkl_file_name):
         break # Unique filename confirmed
@@ -79,4 +83,14 @@ while True:
         print(f"File model_C{input_controller_code}.pkl already exists. Please choose another code.\n")
 
 joblib.dump((best_model_obj, best_model_features), pkl_file_name)
+
+best_RMSE = eval_results_sorted[0].get('RMSE') 
+best_R2 = eval_results_sorted[0].get('R2')
+best_model = eval_results_sorted[0].get('Model')
+modelinfo = pd.DataFrame([best_RMSE, best_R2, best_model])
+featselres = pd.DataFrame(features_and_weights)
+with pd.ExcelWriter(modelinfo_file_name) as writer:
+    modelinfo.to_excel(writer, sheet_name='Model Properties',engine="openpyxl", index=False, header=False)
+    featselres.to_excel(writer, sheet_name='Features',engine="openpyxl", index=False, header=False)
+
 print(f"Model saved to: {pkl_file_name}")

@@ -46,7 +46,7 @@ def SVM(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.DataFrame, y_te
         svm,
         param_grid,
         cv=5,
-        scoring='accuracy',
+        scoring='f1_weighted',
         n_jobs=-1,
         verbose=1
     )

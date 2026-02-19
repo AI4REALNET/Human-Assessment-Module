@@ -45,7 +45,7 @@ def RANSAC_regression(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.D
         ransac, 
         param_grid, 
         cv=2, 
-        scoring='r2', 
+        scoring='neg_root_mean_squared_error', 
         n_jobs=-1, 
         verbose=1
     )

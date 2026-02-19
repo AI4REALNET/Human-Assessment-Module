@@ -44,7 +44,7 @@ def naive_bayes(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.DataFra
         nb,
         param_grid,
         cv=5,
-        scoring='accuracy',
+        scoring='f1_weighted',
         n_jobs=-1,
         verbose=1
     )
