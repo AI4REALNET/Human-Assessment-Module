@@ -107,9 +107,9 @@ Each personalised model expects a JSON file as input containing rows of extracte
 | **vlf**                | Very low-frequency power (ms²). |
   
 ###  Output Details
-- Running the command will generate a model based on the provided dataset.
+- Running the command will generate a model based on the provided dataset. Models information are stored in a .xlsx file.
 - Users must enter a unique code to the model when prompted.
-- The model will be saved as a `.pkl` file in the `cognition_personalised_models` folder within the working directory. The file will follow this naming convention: `cognition_personalised_models/model_<user_code>.pkl`
+- The model will be saved as a `.pkl` file in the `cognition_personalised_models` folder within the working directory. The file will follow this naming convention: `cognition_personalised_models/model_<user_code>.pkl`, whereas the .xlsx follows:  ´modelinfo_C<user_code>.xlsx´.
 
 ### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
@@ -125,9 +125,9 @@ Upon execution, you will be prompted to select a file containing the dataset.
 Each personalised model expects a JSON file as input containing rows of extracted physiological features. The expected structure is the same presented for the cognition performance algorithm. See the "Personalised Quantification of Cognitive Performance" input description for detailed field structure.
 
 ###  Output Details
-- Running the command will generate a set of models from the provided dataset and a CSV with the performance weights.
+- Running the command will generate a set of models from the provided dataset and a .csv with the performance weights. Models information are stored in a .xlsx file.
 - Users must enter a unique code to the model when prompted.
-- The outputs will be saved in the `stress_personalised_models/Controller_<user_code>` folder within the working directory. The model files will follow this naming convention: `stress_<model_name>_C<user_code>.pkl`, while the CSV follows:`model_weights_C<user_code>.csv` 
+- The outputs will be saved in the `stress_personalised_models/Controller_<user_code>` folder within the working directory. The model files will follow this naming convention: `stress_<model_name>_C<user_code>.pkl`, the .csv follows: `model_weights_C<user_code>.csv`, while the .xlsx: ´modelinfo_C<user_code>.xlsx´.
 
 ### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
@@ -151,7 +151,7 @@ For testing reasons, this code version provides a .csv file (`example_ecg_featur
 
 But **should exclude** the `Protocol Variables`, which are only available during training.
 
-⚠️ Line 13 of main.py function can be replaced with a real-time data stream, but ensuring the same feature structure as the example CSV.
+⚠️ Line 13 of main.py function can be replaced with a real-time data stream, but ensuring the same feature structure as the example .csv.
 
 The appropriate models are automatically selected based on the input controller_id.
 
