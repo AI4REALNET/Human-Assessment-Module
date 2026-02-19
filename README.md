@@ -140,10 +140,10 @@ Upon execution, you will be prompted to select a file containing the dataset.
 
 ## ⚙️ Real-time Implementation
 
-The real-time implementation loads personalised cognition and stress models based on a controller_id and applies them to updated physiological feature data, which is read every 60 seconds in a continuous loop.
+The real-time implementation loads personalised cognition and stress models based on a controller_id and applies them to updated physiological feature data, which is read every 30 seconds in a continuous loop.
 
 ### Input
-On the current code version, an example CSV file: `example_ecg_features.csv` with physiological features is uploaded. The input must include all the ECG features used for "Personalised Quantification of Cognitive Performance":  
+For testing reasons, this code version provides a .csv file (`example_ecg_features.csv`) that contains physiological features. If this structure is maintained by users, the input must include all the ECG features listed in "Personalised Quantification of Cognitive Performance":  
 - ECG Waveform Features
 - Heart Rate Variability (HRV) Metrics
 - Heart Rate Metrics
@@ -151,7 +151,7 @@ On the current code version, an example CSV file: `example_ecg_features.csv` wit
 
 But **should exclude** the `Protocol Variables`, which are only available during training.
 
-⚠️ This should be replaced with a real-time data stream , using the same feature structure as the example CSV.
+⚠️ Line 13 of main.py function can be replaced with a real-time data stream, but ensuring the same feature structure as the example CSV.
 
 The appropriate models are automatically selected based on the input controller_id.
 
@@ -162,9 +162,9 @@ The script prints:
 
 - Stress model prediction and explainability results
 
-Results are printed to the console in each 60-second cycle.
+Results are printed to the console in each 30-second cycle.
 
-In the future, the output can be extended to automatically send results to an API endpoint, store them in a database, or feed a real-time dashboard interface.
+Depending on the purpose, the output can be sent automatically to an API endpoint, store them in a database, or feed a real-time dashboard interface.
 
 ### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
@@ -174,9 +174,8 @@ python -m code.main
 
 ## Dependencies
 ### MATLAB Dependencies (for `reaction_time_protocol`)
-- MATLAB R2018a or later
-- Psychtoolbox-3
-- Signal Processing Toolbox
+- MATLAB R2018a or later (with Signal Processing Toolbox)
+- Psychtoolbox-3 (up to version 3.0.19)
 
 #### How-to instal os several MATLAB-specific dependencies to run the experimental protocol properly
 1. Install Required Libraries (Windows)
@@ -223,7 +222,7 @@ sca   % Closes the window`
 If the window opens successfully, your installation is complete.
 
 ### Python Dependencies (for model training and real-time inference):
-- Python 3.x
+- Python 3.11
 - Required Python libraries listed in `requirements.txt`
 
 Install required Python libraries using:
