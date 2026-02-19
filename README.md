@@ -109,7 +109,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 ###  Output Details
 - Running the command will generate a model based on the provided dataset. Models information are stored in a .xlsx file.
 - Users must enter a unique code to the model when prompted.
-- The model will be saved as a `.pkl` file in the `cognition_personalised_models` folder within the working directory. The file will follow this naming convention: `cognition_personalised_models/model_<user_code>.pkl`, whereas the .xlsx follows:  ´modelinfo_C<user_code>.xlsx´.
+- The model will be saved as a `.pkl` file in the `cognition_personalised_models` folder within the working directory. The file will follow this naming convention: `cognition_personalised_models/model_<user_code>.pkl`, whereas the .xlsx follows:  `modelinfo_C<user_code>.xlsx`.
 
 ### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
@@ -127,7 +127,7 @@ Each personalised model expects a JSON file as input containing rows of extracte
 ###  Output Details
 - Running the command will generate a set of models from the provided dataset and a .csv with the performance weights. Models information are stored in a .xlsx file.
 - Users must enter a unique code to the model when prompted.
-- The outputs will be saved in the `stress_personalised_models/Controller_<user_code>` folder within the working directory. The model files will follow this naming convention: `stress_<model_name>_C<user_code>.pkl`, the .csv follows: `model_weights_C<user_code>.csv`, while the .xlsx: ´modelinfo_C<user_code>.xlsx´.
+- The outputs will be saved in the `stress_personalised_models/Controller_<user_code>` folder within the working directory. The model files will follow this naming convention: `stress_<model_name>_C<user_code>.pkl`, the .csv follows: `model_weights_C<user_code>.csv`, while the .xlsx: `modelinfo_C<user_code>.xlsx`.
 
 ### Running the Code
 To execute the algorithm, ensure you are in the root directory of the repository. The script should be run using the following command:
